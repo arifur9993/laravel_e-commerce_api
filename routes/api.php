@@ -27,7 +27,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     // return $request->user();
 });
 Route::group(['middleware' => ['auth:api']], function () use ($router) {
-    Route::group(['prefix'=>'admin'], function(){
+    Route::group(['prefix' => 'admin'], function () {
         /**
          * User Manage
          */
@@ -60,46 +60,46 @@ Route::group(['middleware' => ['auth:api']], function () use ($router) {
         Route::get('/getuser/order', [AdminOrder::class, 'getOrderByUser']);
         Route::post('/order/update/{id}', [AdminOrder::class, 'updateOrder']);
         Route::delete('/order/{id}', [AdminOrder::class, 'deleteOrder']);
-
-
     });
 
     /**
      * For User 
-    */
+     */
 
     //Product
-    Route::get('/product', [MainProduct::class,'showProduct']);
-    Route::get('/product/details/{id}', [MainProduct::class,'productDeatils']);
+    Route::get('/product', [MainProduct::class, 'showProduct']);
+    Route::get('/product/details/{id}', [MainProduct::class, 'productDeatils']);
     //Add To cart
     Route::post('/addToCart', [MainProduct::class, 'addTocart']);
     Route::delete('/removeCart/{id}', [MainProduct::class, 'removeCart']);
-
     //Check Out
     Route::get('/checkout', [MainProduct::class, 'checkOut']);
-
     //Make Order
     Route::post('/placeorder', [MainProduct::class, 'makeOrder']);
     //Get All Order for User
     Route::get('/myorder', [MainProduct::class, 'myOrder']);
-    Route::group(['prefix'=>'support'], function(){
-        Route::get('/getuser/order', [OrderController::class, 'getUserWithOrder']);
-        Route::post('/order/update/{id}', [OrderController::class, 'updateOrder']);
-    });
-
-
+    //Search Product
+    Route::post('/product/search', [MainProduct::class, 'searchProduct']);
 
     /**
      * End User 
-    */
-
+     */
+    /**
+     * For Support
+     */
+    Route::group(['prefix' => 'support'], function () {
+        Route::get('/getuser/order', [OrderController::class, 'getUserWithOrder']);
+        Route::post('/order/update/{id}', [OrderController::class, 'updateOrder']);
+    });
+    /**
+     * End Support
+     */
 });
 
 
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/admin/login', [LoginController::class, 'adminLogin']);
 Route::post('/support/login', [LoginController::class, 'supportLogin']);
-Route::get('/logout', [LoginController::class,'logout']);
-Route::get('/user/info', [LoginController::class,'getUsrInfo']);
-Route::post('/register', [RegisterController::class,'register']);
-
+Route::get('/logout', [LoginController::class, 'logout']);
+Route::get('/user/info', [LoginController::class, 'getUsrInfo']);
+Route::post('/register', [RegisterController::class, 'register']);

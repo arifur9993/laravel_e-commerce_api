@@ -150,8 +150,22 @@ class ProductHandler
         $findOrder = Order::with('hasProduct', 'hasProduct.hasCat', 'hasProduct.hasSubCat')->where('user_id', $id)->get();
         if (count($findOrder) != 0) {
             return GetResponses::returnData($findOrder);
+        } else {
+            return GetResponses::noRecords();
+        }
+    }
+
+    /**
+     * Search Product by Name
+     */
+    public function searchProduct($request)
+    {
+        $findProduct = Product::with('hasCat', 'hasSubCat')->where('name','LIKE','%'.$request->name.'%')->orderBy('name','asc')->get();
+        if(count($findProduct)!=0){
+            return GetResponses::returnData($findProduct);
         }else{
             return GetResponses::noRecords();
+
         }
     }
 }

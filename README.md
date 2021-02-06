@@ -15,7 +15,7 @@ This is a simple Laravel API for e-commerce site, where there has 3 roles admin,
 
 ## How to Setup
 <ul>
-    <li>Copy .env.example file to .env and edit database and passport credentials</li>
+<li>Copy .env.example file to .env and edit database</li>
 <li>Run composer install</li>
 <li>Run php artisan key:generate</li>
 <li>Run php artisan migrate --seed</li>
@@ -23,5 +23,9 @@ This is a simple Laravel API for e-commerce site, where there has 3 roles admin,
 <li>Run php artisan serve</li>
 <li>After sevre will hit postman/insomnia for to check the API</li>
 <li>Next phase is to develope the frontend</li>
+<li>Admin login admin@admin.com/admin1234</li>
+<li>User login user@user.com/user1234</li>
+<li>Support login support@support.com/support1234</li>
 </ul>
+
 

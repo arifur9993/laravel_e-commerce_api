@@ -157,4 +157,18 @@ class ProductController extends Controller
 
         }
     }
+
+    /***
+     * Search Product by Name
+     */
+    public function searchProduct(Request $request,ProductHandler $productHanlder){
+        $user = auth('api')->user();
+
+        if (($user->role_id == 2) && $user->isActive == 1) {
+            return $productHanlder->searchProduct($request);
+        }else{
+            return GetResponses::permissionError();
+
+        }
+    }
 }
