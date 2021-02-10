@@ -27,73 +27,83 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     // return $request->user();
 });
 Route::group(['middleware' => ['auth:api']], function () use ($router) {
-    Route::group(['prefix' => 'admin'], function () {
-        /**
-         * User Manage
-         */
-        Route::post('/user/create', [UserManageController::class, 'createUser']);
-        Route::post('/user/update/{id}', [UserManageController::class, 'updateUser']);
-        Route::get('/user/list', [UserManageController::class, 'userList']);
+    Route::group(['prefix' => 'admin'], function () use ($router) {
+        Route::group(['middleware' => ['can:admin-manage-user']], function () use ($router) {
 
-        /**
-         * Product Category
-         */
-        Route::post('/category/create', [CategoryController::class, 'createCategory']);
-        Route::post('/category/update/{id}', [CategoryController::class, 'updateCategory']);
-        Route::get('/category/list', [CategoryController::class, 'categoryList']);
-        /**
-         * Product Sub Category
-         */
-        Route::post('/subCategory/create', [SubCategoryController::class, 'createsubCategory']);
-        Route::post('/subCategory/update/{id}', [SubCategoryController::class, 'updateSubCategory']);
-        Route::get('/subCategory/list', [SubCategoryController::class, 'subCategoryList']);
-        /**
-         * Product
-         */
-        Route::post('/product/create', [ProductController::class, 'createProduct']);
-        Route::post('/product/update/{id}', [ProductController::class, 'updateProduct']);
-        Route::get('/product/list/{pageNo}', [ProductController::class, 'productList']);
+            /**
+             * User Manage
+             */
+            Route::post('/user/create', [UserManageController::class, 'createUser']);
+            Route::post('/user/update/{id}', [UserManageController::class, 'updateUser']);
+            Route::get('/user/list', [UserManageController::class, 'userList']);
+        });
+        Route::group(['middleware' => ['can:admin-manage-product']], function () use ($router) {
 
-        /**
-         * Order
-         */
-        Route::get('/getuser/order', [AdminOrder::class, 'getOrderByUser']);
-        Route::post('/order/update/{id}', [AdminOrder::class, 'updateOrder']);
-        Route::delete('/order/{id}', [AdminOrder::class, 'deleteOrder']);
+            /**
+             * Product Category
+             */
+            Route::post('/category/create', [CategoryController::class, 'createCategory']);
+            Route::post('/category/update/{id}', [CategoryController::class, 'updateCategory']);
+            Route::get('/category/list', [CategoryController::class, 'categoryList']);
+            /**
+             * Product Sub Category
+             */
+            Route::post('/subCategory/create', [SubCategoryController::class, 'createsubCategory']);
+            Route::post('/subCategory/update/{id}', [SubCategoryController::class, 'updateSubCategory']);
+            Route::get('/subCategory/list', [SubCategoryController::class, 'subCategoryList']);
+            /**
+             * Product
+             */
+            Route::post('/product/create', [ProductController::class, 'createProduct']);
+            Route::post('/product/update/{id}', [ProductController::class, 'updateProduct']);
+            Route::get('/product/list/{pageNo}', [ProductController::class, 'productList']);
+        });
+        Route::group(['middleware' => ['can:admin-manage-order']], function () use ($router) {
+
+            /**
+             * Order
+             */
+            Route::get('/getuser/order', [AdminOrder::class, 'getOrderByUser']);
+            Route::post('/order/update/{id}', [AdminOrder::class, 'updateOrder']);
+            Route::delete('/order/{id}', [AdminOrder::class, 'deleteOrder']);
+        });
     });
+    Route::group(['middleware' => ['can:user-show-product']], function () use ($router) {
+        /**
+         * For User 
+         */
 
-    /**
-     * For User 
-     */
+        //Product
+        Route::get('/product', [MainProduct::class, 'showProduct']);
+        Route::get('/product/details/{id}', [MainProduct::class, 'productDeatils']);
+        //Add To cart
+        Route::post('/addToCart', [MainProduct::class, 'addTocart']);
+        Route::delete('/removeCart/{id}', [MainProduct::class, 'removeCart']);
+        //Check Out
+        Route::get('/checkout', [MainProduct::class, 'checkOut']);
+        //Make Order
+        Route::post('/placeorder', [MainProduct::class, 'makeOrder']);
+        //Get All Order for User
+        Route::get('/myorder', [MainProduct::class, 'myOrder']);
+        //Search Product
+        Route::post('/product/search', [MainProduct::class, 'searchProduct']);
 
-    //Product
-    Route::get('/product', [MainProduct::class, 'showProduct']);
-    Route::get('/product/details/{id}', [MainProduct::class, 'productDeatils']);
-    //Add To cart
-    Route::post('/addToCart', [MainProduct::class, 'addTocart']);
-    Route::delete('/removeCart/{id}', [MainProduct::class, 'removeCart']);
-    //Check Out
-    Route::get('/checkout', [MainProduct::class, 'checkOut']);
-    //Make Order
-    Route::post('/placeorder', [MainProduct::class, 'makeOrder']);
-    //Get All Order for User
-    Route::get('/myorder', [MainProduct::class, 'myOrder']);
-    //Search Product
-    Route::post('/product/search', [MainProduct::class, 'searchProduct']);
-
-    /**
-     * End User 
-     */
-    /**
-     * For Support
-     */
-    Route::group(['prefix' => 'support'], function () {
-        Route::get('/getuser/order', [OrderController::class, 'getUserWithOrder']);
-        Route::post('/order/update/{id}', [OrderController::class, 'updateOrder']);
+        /**
+         * End User 
+         */
     });
-    /**
-     * End Support
-     */
+    Route::group(['prefix' => 'support'], function () use ($router) {
+        Route::group(['middleware' => ['can:support-manage-order']], function () use ($router) {
+            /**
+             * For Support
+             */
+            Route::get('/getuser/order', [OrderController::class, 'getUserWithOrder']);
+            Route::post('/order/update/{id}', [OrderController::class, 'updateOrder']);
+        });
+        /**
+         * End Support
+         */
+    });
 });
 
 

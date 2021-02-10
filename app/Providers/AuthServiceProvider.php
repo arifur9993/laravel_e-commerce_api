@@ -26,6 +26,55 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Passport::routes();
+        /**
+         * Passport Register the routes necessary to issue access tokens and
+         * revoke access tokens, clients, and personal access tokens:
+         */
+        Passport::routes(null, ['prefix' => 'api/v1/oauth']);
+        // /* define gate for admin-manage-product permission  */
+        Gate::define('admin-manage-product', function ($user) {
+            $userRole  = $user->hasRole->hasPermissions;
+            foreach ($userRole as $permission) {
+                if ($permission->name == 'admin-manage-product') {
+                    return true;
+                }
+            }
+        });
+        // /* define gate for admin-manage-user permission  */
+        Gate::define('admin-manage-user', function ($user) {
+            $userRole  = $user->hasRole->hasPermissions;
+            foreach ($userRole as $permission) {
+                if ($permission->name == 'admin-manage-user') {
+                    return true;
+                }
+            }
+        });
+        // /* define gate for admin-manage-order permission  */
+        Gate::define('admin-manage-order', function ($user) {
+            $userRole  = $user->hasRole->hasPermissions;
+            foreach ($userRole as $permission) {
+                if ($permission->name == 'admin-manage-order') {
+                    return true;
+                }
+            }
+        });
+        // /* define gate for user-show-product permission  */
+        Gate::define('user-show-product', function ($user) {
+            $userRole  = $user->hasRole->hasPermissions;
+            foreach ($userRole as $permission) {
+                if ($permission->name == 'user-show-product') {
+                    return true;
+                }
+            }
+        });
+        // /* define gate for support-manage-order permission  */
+        Gate::define('support-manage-order', function ($user) {
+            $userRole  = $user->hasRole->hasPermissions;
+            foreach ($userRole as $permission) {
+                if ($permission->name == 'support-manage-order') {
+                    return true;
+                }
+            }
+        });
     }
 }

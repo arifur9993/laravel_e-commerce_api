@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Auth\UserDetail;
 use App\Models\Auth\User;
 use App\Models\Auth\Role;
+use App\Models\Auth\RoleHasPermission;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 
@@ -30,6 +31,32 @@ class UserSedder extends Seeder
         Role::create([
             'name' => 'Support',
         ]);
+
+        DB::table('role_has_permissions')->truncate();
+        //Insert Permission
+        RoleHasPermission::create([
+            'role_id'=>1,
+            'name'=>'admin-manage-product',
+        ]);
+
+        RoleHasPermission::create([
+            'role_id'=>1,
+            'name'=>'admin-manage-user',
+        ]);
+
+        RoleHasPermission::create([
+            'role_id'=>1,
+            'name'=>'admin-manage-order',
+        ]);
+        RoleHasPermission::create([
+            'role_id'=>2,
+            'name'=>'user-show-product',
+        ]);
+        RoleHasPermission::create([
+            'role_id'=>3,
+            'name'=>'support-manage-order',
+        ]);
+
         DB::table('users')->truncate();
         //Inser User 
         User::create([
