@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Passport\Passport;
+use GetResponses;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -39,7 +40,9 @@ class AuthServiceProvider extends ServiceProvider
                     return true;
                 }
             }
+            return GetResponses::permissionError();
         });
+
         // /* define gate for admin-manage-user permission  */
         Gate::define('admin-manage-user', function ($user) {
             $userRole  = $user->hasRole->hasPermissions;
@@ -48,6 +51,7 @@ class AuthServiceProvider extends ServiceProvider
                     return true;
                 }
             }
+            return GetResponses::permissionError();
         });
         // /* define gate for admin-manage-order permission  */
         Gate::define('admin-manage-order', function ($user) {
@@ -57,6 +61,7 @@ class AuthServiceProvider extends ServiceProvider
                     return true;
                 }
             }
+            return GetResponses::permissionError();
         });
         // /* define gate for user-show-product permission  */
         Gate::define('user-show-product', function ($user) {
@@ -66,6 +71,7 @@ class AuthServiceProvider extends ServiceProvider
                     return true;
                 }
             }
+            return GetResponses::permissionError();
         });
         // /* define gate for support-manage-order permission  */
         Gate::define('support-manage-order', function ($user) {
@@ -75,6 +81,7 @@ class AuthServiceProvider extends ServiceProvider
                     return true;
                 }
             }
+            return GetResponses::permissionError();
         });
     }
 }
